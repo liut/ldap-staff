@@ -102,6 +102,16 @@ function password_hash_custom($password_clear,$enc_type) {
 
             break;
 
+        case 'sha512':
+            if (function_exists('openssl_digest') && function_exists('base64_encode')) {
+                $new_value = sprintf('{SHA512}%s', base64_encode(openssl_digest($password_clear, 'sha512', true)));
+
+            } else {
+                error(_('Your PHP install doest not have the openssl_digest() or base64_encode() function. Cannot do SHA512 hashes. '),'error','index.php');
+            }
+
+            break;
+
         case 'clear':
         default:
             $new_value = $password_clear;
