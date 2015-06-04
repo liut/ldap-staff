@@ -1,7 +1,5 @@
 <?PHP
 
-defined('LDAP_PORT') || define('LDAP_PORT', 389);
-
 function error($msg) {
 	die($msg);
 }

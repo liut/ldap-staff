@@ -1,8 +1,6 @@
 <?PHP
 
-include_once __DIR__ . '/../inc/config.inc.php';
-
-include_once __DIR__ . '/../inc/ldap.func.php';
+include_once __DIR__ . '/../inc/init.php';
 
 $ret = array(
 	array(), 	// username
@@ -35,12 +33,13 @@ ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
 ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
 
 // using ldap bind
-$ldaprdn  = sprintf(LDAP_BIND_FORMAT, $username);     // ldap rdn or dn
+$bind_fmt = defined('LDAP_BIND_FORMAT') ? LDAP_BIND_FORMAT : 'uid=%s,ou=people,'.LDAP_BASE_DN;
+$ldaprdn  = sprintf( $bind_fmt, $username);     // ldap rdn or dn
 $ldapbind = null;
 
-$ldapbind = ldap_bind($ldapconn, $ldaprdn, $password);
+$ldapbind = @ldap_bind($ldapconn, $ldaprdn, $password);
 if (!$ldapbind) {
-	$ret[1] = array('password', false, '密码错误');
+	$ret[1] = array('password', false, '密码错误: '.ldap_error($ldapconn));
 	die(json_encode($ret));
 }
 
