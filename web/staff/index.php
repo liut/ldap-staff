@@ -7,5 +7,5 @@ Loader::import(__DIR__ . DS . '_class');
 Dispatcher::farm([
 	//'default_controller' => 'home',
 	'default_action' => 'index',
-	'view_ext' => '.php'
+	'view_ext' => '.htm.php'
 ])->run();
