@@ -38,33 +38,25 @@ class Controller_Password extends Controller
 		}
 
 		$ldap = Da_Wrapper::dbo('staff.people');
-		if (!$ldapconn) {
+		if (!$ldap->connect()) {
 			return [FALSE, 'error' => ['message' => '连接服务器失败: Could not connect to LDAP server.',
 			'field' => 'username']];
 		}
 
-		// Set some ldap options for talking to
-		ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
-
-		// using ldap bind
-		$bind_fmt = defined('LDAP_BIND_FORMAT') ? LDAP_BIND_FORMAT : 'uid=%s,ou=people,'.LDAP_BASE_DN;
-		$ldaprdn  = sprintf( $bind_fmt, $username);     // ldap rdn or dn
-		$ldapbind = FALSE;
-
-		$ldapbind = @ldap_bind($ldapconn, $ldaprdn, $password);
+		$rdn = $ldap->rdn($username);
+		$ldapbind = $ldap->bind($rdn, $password);
 		if (!$ldapbind) {
 			return [FALSE,
 				'error' => [
-					'message' => '密码错误: '.ldap_error($ldapconn),
+					'message' => '密码错误: '.$ldap->error(),
 					'field' => 'old_password'
 				]
 			];
 		}
 
 		$userdata = array('userPassword' => password_hash_custom($new_password, LDAP_PASSWORD_HASH));
-		if(ldap_modify($ldapconn, $ldaprdn, $userdata)) {
-			return TRUE; // 密码修改成功
+		if($ldap->modify($rdn, $userdata)) {
+			return [TRUE]; // 密码修改成功
 		}
 
 		return [FALSE,
