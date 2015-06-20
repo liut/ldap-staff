@@ -35,7 +35,7 @@ ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
 // using ldap bind
 $bind_fmt = defined('LDAP_BIND_FORMAT') ? LDAP_BIND_FORMAT : 'uid=%s,ou=people,'.LDAP_BASE_DN;
 $ldaprdn  = sprintf( $bind_fmt, $username);     // ldap rdn or dn
-$ldapbind = null;
+$ldapbind = FALSE;
 
 $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $password);
 if (!$ldapbind) {
