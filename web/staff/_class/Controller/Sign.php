@@ -3,16 +3,18 @@
 /**
  * undocumented class
  *
- * @package default
- * @author
+ * @package web
+ * @author liut
  **/
 class Controller_Sign extends Controller
 {
 	public function action_in()
 	{
-		// $ldap = Da_Wrapper::dbo('staff.people');
+		$current_user = Staff::current();
 
-		return 'staff/signin';
+		return ['staff/signin',
+			['current_user' => $current_user]
+		];
 	}
 
 	public function action_in_post()
@@ -20,23 +22,27 @@ class Controller_Sign extends Controller
 		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 		$password = filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
 
-		$ldap = Da_Wrapper::dbo('staff.people');
-		$bind = $ldap->bind($ldap->rdn($username), $password);
-		if ($bind) {
-			return [TRUE];
+		$user = Staff::signin($username, $password);
+		if (is_object($user)) {
+			return [TRUE, $user];
+			// return [302, '/'];
 		}
 
-		return [FALSE,
-			'error' => [
-				'message' => '密码错误: '.$ldap->error(),
-				'field' => 'password'
-			]
-		];
+		return $user;
+
+		// return [FALSE,
+		// 	'error' => [
+		// 		'message' => '密码错误: '.$ldap->error(),
+		// 		'field' => 'password'
+		// 	]
+		// ];
 
 	}
 
 	public function action_out()
 	{
+		Staff::current()->signout();
+		return [302, '/'];
 	}
 
 } // END class Controller_Sign

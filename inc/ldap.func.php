@@ -27,7 +27,7 @@ function password_hash_custom($password_clear,$enc_type) {
             break;
 
         case 'crypt':
-            if ($_SESSION[APPCONFIG]->getValue('password', 'no_random_crypt_salt'))
+            if (isset($_SESSION[APPCONFIG]) && $_SESSION[APPCONFIG]->getValue('password', 'no_random_crypt_salt'))
                 $new_value = sprintf('{CRYPT}%s',crypt($password_clear,substr($password_clear,0,2)));
             else
                 $new_value = sprintf('{CRYPT}%s',crypt($password_clear,random_salt(2)));
@@ -142,5 +142,6 @@ function random_salt($length) {
 
     return $str;
 }
+
 
 

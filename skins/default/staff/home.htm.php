@@ -41,9 +41,16 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <?PHP if (isset($current_user) && $current_user->isLogin()): ?>
-              <li><a href="./"><?=$current_user->name?></a></li>
-              <li><a href="/sign/out">Sign out</a></li>
+              <?PHP if (Staff::current()->isLogin()): ?>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <i class="glyphicon glyphicon-user"></i> <?=Staff::current()->name?> <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                  <li><a href="/profile"><i class="glyphicon glyphicon-cog"></i> Profile</a></li>
+                  <li><a href="/sign/out"><i class="glyphicon glyphicon-log-out"></i> Sign out</a></li>
+                </ul>
+              </li>
               <?PHP else:?>
               <li><a href="/sign/in">Sign in</a></li>
               <?PHP endif;?>

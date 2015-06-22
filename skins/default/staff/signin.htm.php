@@ -133,6 +133,7 @@
                   Dust.alert('成功', 'OK', function(){
                     bv.resetForm(true);
                     // $("#form1").get(0).reset();
+                    location.href = '/';
                   });
                 } else if (typeof res.error != "undefined") {
                   var error = res.error

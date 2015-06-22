@@ -3,8 +3,8 @@
 /**
  * undocumented class
  *
- * @package default
- * @author
+ * @package web
+ * @author liut
  **/
 class Controller_Password extends Controller
 {

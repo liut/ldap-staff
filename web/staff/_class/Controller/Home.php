@@ -3,14 +3,18 @@
 /**
  * undocumented class
  *
- * @package default
- * @author
+ * @package web
+ * @author liut
  **/
 class Controller_Home extends Controller
 {
 	public function action_index($value='')
 	{
-		return 'staff/home';
+		$current_user = Staff::current();
+
+		return ['staff/home', [
+			'current_user' => $current_user
+		]];
 	}
 
 	public function action_pi()
