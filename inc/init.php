@@ -39,7 +39,6 @@ include_once __DIR__ . '/ldap.func.php';
 if (@session_id())
 	return;
 
-$sess_name = getenv('APP_SESSION');
-$sess_name && @session_name($sess_name);
+defined('APP_SESSION') && @session_name(APP_SESSION);
 @session_start();
 

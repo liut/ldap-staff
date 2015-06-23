@@ -25,11 +25,13 @@ if('WINNT' == PHP_OS || 'Darwin' == PHP_OS || isset($_SERVER['LOCAL_DEV'])) // �
 	defined('_PS_DEBUG') || define('_PS_DEBUG', TRUE );	// DEBUG , beta only
 	defined('_DB_DEBUG') || define('_DB_DEBUG', TRUE );	// DEBUG , beta only
 
+	define('APP_SESSION', '_sess_dev');
 }
 else
 {
 	defined('LOG_LEVEL') || define('LOG_LEVEL', 5 ); // 3=err,4=warn,5=notice,6=info,7=debug
 	define('L_DOMAIN', 'example.info' );	// 主域名
+	define('APP_SESSION', '_sess');
 }
 
 define('LDAP_HOST', 'slapd');

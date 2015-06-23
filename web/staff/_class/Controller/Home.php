@@ -19,10 +19,11 @@ class Controller_Home extends Controller
 
 	public function action_pi()
 	{
-		// $ldap = Da_Wrapper::dbo('staff.people');
+		if ($this->_request->CLIENT_IP != '127.0.0.1') {
+			return 404;
+		}
 
-		// echo getenv('LDAP_BASE_DN');
-		// phpinfo(16+32);
-		phpinfo();
+		phpinfo(16+32);
+		// phpinfo();
 	}
 } // END class Controller_Home
