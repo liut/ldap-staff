@@ -10,8 +10,8 @@ define('LIB_ROOT', APP_ROOT . 'library' . DS);
 define('WEB_ROOT', APP_ROOT . 'web' . DS);
 define('SKIN_ROOT', APP_ROOT . 'skins' . DS);
 
-define('LOG_ROOT', '/var/log/merrysix/');
-define('TEMP_ROOT', '/var/tmp/merrysix/' );
+define('LOG_ROOT', '/var/log/app/');
+define('TEMP_ROOT', '/var/tmp/app/' );
 
 // writable paths
 define('CACHE_ROOT', WEB_ROOT.'cache/' );	//
@@ -20,11 +20,7 @@ define('DATA_ROOT', WEB_ROOT.'data/' );	//
 if('WINNT' == PHP_OS || 'Darwin' == PHP_OS || isset($_SERVER['LOCAL_DEV'])) // 为 windows & macosx 下调试用，仅 beta 和 开发 环境
 {
 	defined('LOG_LEVEL') || define('LOG_LEVEL', 6 ); // 3=err,4=warn,5=notice,6=info,7=debug
-	define('L_DOMAIN', 'merrysix.cc' );
-	define('L_RES_DOMAIN', 'merrysix.cc' );
-	define('L_STO_DOMAIN', 'WINNT' == PHP_OS ? 'merrysix.info' : 'merrysix.cc');
-	define('L_MAN_DOMAIN', 'merrysix.cc');
-
+	define('L_DOMAIN', 'example.dev' );
 
 	defined('_PS_DEBUG') || define('_PS_DEBUG', TRUE );	// DEBUG , beta only
 	defined('_DB_DEBUG') || define('_DB_DEBUG', TRUE );	// DEBUG , beta only
@@ -32,11 +28,8 @@ if('WINNT' == PHP_OS || 'Darwin' == PHP_OS || isset($_SERVER['LOCAL_DEV'])) // �
 }
 else
 {
-	defined('LOG_LEVEL') || define('LOG_LEVEL', 6 ); // 3=err,4=warn,5=notice,6=info,7=debug
-	define('L_DOMAIN', 'merrysix.info' );	// 主域名
-	define('L_RES_DOMAIN', 'merrysix.info' );	// 静态资源域名
-	define('L_STO_DOMAIN', 'merrysix.info'); 	// 存储的(图片)资源域名
-	define('L_MAN_DOMAIN', 'merrysix.info'); // 管理所用域名
+	defined('LOG_LEVEL') || define('LOG_LEVEL', 5 ); // 3=err,4=warn,5=notice,6=info,7=debug
+	define('L_DOMAIN', 'example.info' );	// 主域名
 }
 
 define('LDAP_HOST', 'slapd');

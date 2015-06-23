@@ -34,23 +34,12 @@ elseif (isset($_SERVER['HTTP_HOST'])) { // http mod, cgi, cgi-fcgi
 	}
 }
 
-if (!defined('LDAP_HOST')) {
-	die('LDAP_HOST not found');
-}
-
-if (!defined('LDAP_BASE_DN')) {
-	die('LDAP_BASE_DN not found');
-}
-
-defined('LDAP_PORT') || define('LDAP_PORT', 389);
-defined('LDAP_PASSWORD_HASH') || define('LDAP_PASSWORD_HASH', 'ssha');
-
 include_once __DIR__ . '/ldap.func.php';
 
 if (@session_id())
 	return;
 
-$sess_name = getenv('APP_SESSION_NAME');
+$sess_name = getenv('APP_SESSION');
 $sess_name && @session_name($sess_name);
 @session_start();
 
