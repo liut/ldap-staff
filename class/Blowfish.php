@@ -60,7 +60,7 @@ class Blowfish
 	 * @return string Original data
 	 * @author lem9 (taken from the phpMyAdmin source)
 	 */
-	public sattic function decrypt($encdata, $secret=null) {
+	public static function decrypt($encdata, $secret=null) {
 
 	    # This cache gives major speed up for stupid callers :)
 	    static $CACHE = array();

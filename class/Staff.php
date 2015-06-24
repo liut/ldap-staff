@@ -23,32 +23,17 @@ class Staff extends AccountBase
 
 	const FIELD_LOGIN   = 'uid';			// 登录名字段
 
-	const SK = 'USER';
+	const kSESS = 'USER';
+	const FILTER = '(objectClass=inetOrgPerson)';
 
-	protected static $_stored_keys = array('uid','displayName','lastHit');
+	protected static $_stored_keys = array('uid','displayName','sn','cn','lastHit');
 
 	protected static $_current;
 
 	public static function findByPk($uid, $pk = 'uid')
 	{
-		throw new DomainException('not implementation');
-	}
-
-	/**
-	 * login
-	 */
-	public static function signin($login, $password)
-	{
 		$ldap = static::dao();
-		$bind = $ldap->login(strtolower($login), $password);
-		if (!$bind) {
-			return [FALSE, 'error' => [
-				'message' => '密码错误: '.$ldap->error(),
-				'field' => 'password'
-			]];
-		}
-
-		$result = $ldap->read($ldap->rdn($login), '(objectClass=inetOrgPerson)', static::$_attributes);
+		$result = $ldap->read($ldap->rdn($uid), static::FILTER, static::$_attributes);
 		if (!$result) {
 			return [FALSE, 'error' => [
 				'message' => 'read error: '.$ldap->error(),
@@ -56,8 +41,6 @@ class Staff extends AccountBase
 			]];
 		}
 		$entries = $ldap->get_entries($result);
-		// print_r($entries);
-		// var_dump($ldap->error());
 
 		$staff = [];
 		foreach (static::$_attributes as $key) {
@@ -67,18 +50,44 @@ class Staff extends AccountBase
 			}
 		}
 
-		$user = static::farm($staff);
+		return $staff;
+	}
+
+	public static function authenticate($login, $password)
+	{
+		$login = strtolower($login);
+		$ldap = static::dao();
+		$bind = $ldap->login($login, $password);
+		if (!$bind) {
+			return [FALSE, 'error' => [
+				'message' => '密码错误: '.$ldap->error(),
+				'field' => 'password'
+			]];
+		}
+
+		static::saveLogin($login, $password);
+
+		$data = static::findByPk($login);
+		if (isset($data[0]) && is_bool($data[0])) {
+			return $data;
+		}
+
+		$user = static::farm($data);
 		$user->isNew(FALSE);
-		// $user = static::authenticate(strtolower($login), $password);
-		// if (!is_object($user)) {
-		// 	// 直接返回错误编号
-		// 	return $user;
-		// }
-		//$callback = function($ret, &$row){
-			//var_dump($ret, $row);exit;
-		//	return $ret;
-		//};
-		//static::bind('after_update', $callback);
+		return $user;
+	}
+
+	/**
+	 * login
+	 */
+	public static function signin($login, $password)
+	{
+		$user = static::authenticate($login, $password);
+		if (!is_object($user)) {
+			// 直接返回错误编号
+			return $user;
+		}
+
 		return static::signinDirect($user);
 	}
 
@@ -89,7 +98,7 @@ class Staff extends AccountBase
 		$user->times_login ++;
 		// $user->last_tsid = Bb_Ticket::current()->id;
 		// $user->save();
-		$_SESSION[self::SK] = $user;
+		$_SESSION[self::kSESS] = $user;
 		static::setHttpCookie($user);
 
 		return $user;
@@ -101,14 +110,34 @@ class Staff extends AccountBase
 		$_SESSION['BOUND'] = $user;
 	}
 
-	protected static function loadLogin()
+	public static function restoreLogin()
 	{
-		$user = $_SESSION['BOUND'];
-		if (!isset($user) || !isset($user['name'])) {
+		$user = isset($_SESSION['BOUND']) ? $_SESSION['BOUND'] : NULL;
+		if (!isset($user) || !isset($user['uid']) || !isset($user['pass'])) {
 			return FALSE;
 		}
 
-		return ['name' => Blowfish::decrypt($user['name']), 'pass' => Blowfish::decrypt($user['pass'])];
+		$ldap = static::dao();
+		return $ldap->login(Blowfish::decrypt($user['uid']), Blowfish::decrypt($user['pass']));
+	}
+
+	protected static function retrieve()
+	{
+		$user = parent::retrieve();
+
+		if ($user->isLogin() && static::restoreLogin()) {
+			$data = static::findByPk($user->uid);
+			if (isset($data[0]) && is_bool($data[0])) {
+				return $user;
+			}
+
+			if ($user->uid == $data['uid']) {
+				unset($data['uid']);
+				$user->set($data);
+			}
+		}
+
+		return $user;
 	}
 
 	/**
@@ -125,6 +154,11 @@ class Staff extends AccountBase
 			return $this->fullname;
 		}
 		return $this->uid;
+	}
+
+	public function getFullname()
+	{
+		return $this->sn . ' ' . $this->cn;
 	}
 
 } // END class Staff

@@ -10,7 +10,14 @@ class Controller_Profile extends Controller
 {
 	public function action_index($value='')
 	{
-		echo 'building';
+		$current_user = $this->getUser();
+		if (!$current_user->isLogin()) {
+			return [302, '/sign/in'];
+		}
+
+		return ['staff/profile', [
+			//
+		]];
 		// TODO:
 	}
 
