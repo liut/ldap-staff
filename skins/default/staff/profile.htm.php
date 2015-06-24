@@ -34,6 +34,8 @@
         <dd><?=Staff::current()->mail?></dd>
         <dt>Mobile:</dt>
         <dd><?=Staff::current()->mobile?></dd>
+        <dt>Is keeper:</dt>
+        <dd><?=Staff::current()->isKeeper()?'Yes':'No'?></dd>
       </dl>
 
     </div> <!-- /container -->

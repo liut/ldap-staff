@@ -15,7 +15,7 @@ class Staff extends AccountBase
 	protected static $_primary_key = 'uid';
 	protected static $_cachable = 0;
 	protected static $_editables = ['userPassword','displayName','mobile','mail'];
-	protected static $_attributes = ['cn', 'displayName', 'employeeNumber', 'mail', 'mobile', 'sn', 'uid', 'userPassword'];
+	protected static $_attributes = ['dn','cn', 'displayName', 'employeeNumber', 'mail', 'mobile', 'sn', 'uid', 'userPassword'];
 
 	const COOKIE_NAME = '_lcgc';
 	const COOKIE_LIFE = 604800;//	60*60*24*7;
@@ -24,7 +24,8 @@ class Staff extends AccountBase
 	const FIELD_LOGIN   = 'uid';			// 登录名字段
 
 	const kSESS = 'USER';
-	const FILTER = '(objectClass=inetOrgPerson)';
+	const FILTER_PEOPLE = '(objectClass=inetOrgPerson)';
+	const FILTER_GROUP = '(objectClass=groupOfNames)';
 
 	protected static $_stored_keys = array('uid','displayName','sn','cn','lastHit');
 
@@ -33,20 +34,32 @@ class Staff extends AccountBase
 	public static function findByPk($uid, $pk = 'uid')
 	{
 		$ldap = static::dao();
-		$result = $ldap->read($ldap->rdn($uid), static::FILTER, static::$_attributes);
+		$result = $ldap->read($ldap->rdn($uid), static::FILTER_PEOPLE, static::$_attributes);
 		if (!$result) {
 			return [FALSE, 'error' => [
 				'message' => 'read error: '.$ldap->error(),
-				// 'field' => 'username'
 			]];
 		}
 		$entries = $ldap->get_entries($result);
+		if (!$entries || $entries['count'] == 0) {
+			return [FALse, 'error' => [
+				'message' => 'not found. '.$ldap->error(),
+			]];
+		}
+		$entry = $entries[0];
 
 		$staff = [];
 		foreach (static::$_attributes as $key) {
 			$k = strtolower($key);
-			if (isset($entries[0][$k][0])) {
-				$staff[$key] = $entries[0][$k][0];
+			if (isset($entry[$k])) {
+				if (is_string($entry[$k])) {
+					$staff[$key] = $entry[$k];
+				} elseif (is_array($entry[$k]) && isset($entry[$k][0])) {
+					$staff[$key] = $entry[$k][0];
+				} else {
+					Log::notice($entry[$k], __MEHTOD__.' error entry value');
+				}
+
 			}
 		}
 
@@ -140,6 +153,29 @@ class Staff extends AccountBase
 		return $user;
 	}
 
+	public static function loadKeepers()
+	{
+		static $CACHE_KEEPERS = [];
+		if (static::restoreLogin()) {
+			$ldap = static::dao();
+			$limit = 10;
+			$sr = $ldap->read('cn=keeper,'.$ldap->baseDn('groups'), static::FILTER_GROUP, ['cn', 'member'], FALSE, $limit);
+			$entries = $ldap->get_entries($sr);
+			$entry = $entries[0];
+			if (isset($entry['member']) && $entry['member']['count'] > 0) {
+				unset($entry['member']['count']);
+				$CACHE_KEEPERS = $entry['member'];
+			}
+		}
+
+		return $CACHE_KEEPERS;
+	}
+
+	public static function findAll($limit = NULL, $offset = 0)
+	{
+		// TODO:
+	}
+
 	/**
 	 * name
 	 *
@@ -159,6 +195,11 @@ class Staff extends AccountBase
 	public function getFullname()
 	{
 		return $this->sn . ' ' . $this->cn;
+	}
+
+	public function isKeeper()
+	{
+		return in_array($this->dn, static::loadKeepers());
 	}
 
 } // END class Staff
