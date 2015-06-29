@@ -18,3 +18,10 @@ temp/
 # Legacy ZF1
 demos/
 extras/documentation
+
+node_modules
+
+/web/cache/*
+/web/data/*
+
+/config

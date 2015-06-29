@@ -1,3 +1,6 @@
 [submodule "library"]
 	path = library
 	url = https://github.com/liut/lute_core
+[submodule "third/twig"]
+	path = third/twig
+	url = git://github.com/twigphp/Twig.git

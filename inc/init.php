@@ -14,6 +14,10 @@ Loader::init();
 Loader::import(APP_ROOT . 'class', TRUE);
 Loader::import(WEB_ROOT . '_class', TRUE);
 
+Loader::import(APP_ROOT . 'third' . DS . 'twig' . DS . 'lib');
+
+include_once LIB_ROOT . 'include/profiling.php';
+
 if (defined('_PS_DEBUG') && TRUE === _PS_DEBUG) {
 	set_error_handler(['Loader','printError']);
 }
