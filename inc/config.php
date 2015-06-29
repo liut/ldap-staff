@@ -15,7 +15,7 @@ define('TEMP_ROOT', '/var/tmp/app/' );
 
 // writable paths
 define('CACHE_ROOT', WEB_ROOT.'cache/' );	//
-define('DATA_ROOT', WEB_ROOT.'data/' );	//
+define('DATA_ROOT', APP_ROOT.'data/' );	//
 
 if('WINNT' == PHP_OS || 'Darwin' == PHP_OS || isset($_SERVER['LOCAL_DEV'])) // 为 windows & macosx 下调试用，仅 beta 和 开发 环境
 {

@@ -16,6 +16,7 @@ class Staff extends AccountBase
 	protected static $_cachable = 0;
 	protected static $_editables = ['userPassword','displayName','mobile','mail'];
 	protected static $_attributes = ['dn','cn', 'displayName', 'employeeNumber', 'mail', 'mobile', 'sn', 'uid', 'userPassword'];
+	protected static $_api_keys = ['cn', 'displayName', 'employeeNumber', 'mail', 'mobile', 'sn', 'uid'];
 
 	const COOKIE_NAME = '_lcgc';
 	const COOKIE_LIFE = 604800;//	60*60*24*7;
@@ -66,7 +67,7 @@ class Staff extends AccountBase
 		return $staff;
 	}
 
-	public static function authenticate($login, $password)
+	public static function authenticate($login, $password, $option = NULL)
 	{
 		$login = strtolower($login);
 		$ldap = static::dao();

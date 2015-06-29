@@ -8,12 +8,25 @@
  **/
 class Controller_Sign extends Controller
 {
+	private function referer()
+	{
+		$referer = $this->_request->get('referer', 'url');
+
+		if (empty($referer)) {
+			$referer = $this->_request->HTTP_REFERER;
+		}
+
+		if (empty($referer)) {
+			$referer = '/';
+		}
+
+		return $referer;
+	}
+
 	public function action_in()
 	{
-		$current_user = Staff::current();
-
 		return ['staff/signin',
-			['current_user' => $current_user]
+			['referer' => $this->referer()]
 		];
 	}
 
@@ -24,7 +37,10 @@ class Controller_Sign extends Controller
 
 		$user = Staff::signin($username, $password);
 		if (is_object($user)) {
-			return [TRUE, $user];
+			return [TRUE, [
+				'user' => $user,
+				'referer' => $this->referer()]
+			];
 			// return [302, '/'];
 		}
 

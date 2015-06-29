@@ -1,0 +1,20 @@
+{
+    "name": "lcgc/ldap-staff",
+    "description": "A simple staff panel for ldap people",
+    "homepage": "https://github.com/liut/ldap-staff",
+    "license": "MIT",
+    "version": "0.0.2",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5.0",
+        "lute/core": ">=0.0.2",
+        "twig/twig": ">=1.9.1,<2.0-dev"
+    },
+    "repositories": [
+    	{
+        "type": "vcs",
+        "url": "https://github.com/liut/lute_core"
+	    }
+    ]
+}
+
