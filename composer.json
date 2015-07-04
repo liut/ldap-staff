@@ -7,7 +7,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.5.0",
-        "lute/core": ">=0.0.2",
+        "lute/core": ">=0.0.3",
         "twig/twig": ">=1.9.1,<2.0-dev"
     },
     "repositories": [
