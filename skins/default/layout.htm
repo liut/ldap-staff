@@ -8,7 +8,7 @@
     <title>{% block title %}{% endblock %} - Staff panel</title>
 
     <!-- Bootstrap -->
-    <link href="/static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{constant('L_RES_URL')}}bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,9 +27,9 @@
     </div> <!-- /container -->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="/static/js/jquery-1.11.3.min.js"></script>
+  <script src="{{constant('L_RES_URL')}}js/jquery-1.11.3.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <script src="{{constant('L_RES_URL')}}bootstrap-3.3.5/js/bootstrap.min.js"></script>
     {% block tail %}
     {% endblock %}
   </body>

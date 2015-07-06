@@ -1,8 +1,8 @@
 {% extends "layout.htm" %}
 {% block title %}Profile{% endblock %}
 {% block head %}
-    <link href="/static/css/bootstrapValidator.css" rel="stylesheet">
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{constant('L_RES_URL')}}css/bootstrapValidator.css" rel="stylesheet">
+    <link href="{{constant('L_RES_URL')}}css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
 {% block content %}
 
@@ -38,8 +38,8 @@
 
 {% block tail %}
 
-  <script src="/static/js/bootstrapValidator.min.js"></script>
-  <script src="/static/js/bootstrap-dust-func.js"></script>
+  <script src="{{constant('L_RES_URL')}}js/bootstrapValidator.min.js"></script>
+  <script src="{{constant('L_RES_URL')}}js/bootstrap-dust-func.js"></script>
   <script type="text/javascript">
       jQuery(document).ready(function () {
 

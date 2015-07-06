@@ -28,6 +28,10 @@ function start() {
           sed -i "s/, 'example\.*'/, '$APP_DOMAIN'/g" $CONFIG
         fi
 
+        if [ ! -z "$RES_URL" ]; then
+          sed -i "s/RES_URL', '.*'/RES_URL', '$RES_URL'/g" $CONFIG
+        fi
+
         if [ ! -z "$APP_SESSION" ]; then
           sed -i "s/'APP_SESSION', '.*'/'APP_SESSION', '$APP_SESSION'/g" $CONFIG
         fi

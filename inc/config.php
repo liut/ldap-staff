@@ -21,6 +21,7 @@ if('WINNT' == PHP_OS || 'Darwin' == PHP_OS || isset($_SERVER['LOCAL_DEV'])) // �
 {
 	defined('LOG_LEVEL') || define('LOG_LEVEL', 6 ); // 3=err,4=warn,5=notice,6=info,7=debug
 	define('L_DOMAIN', 'example.dev' );
+	define('L_RES_URL', 'http://docker.local:32807/');
 
 	defined('_PS_DEBUG') || define('_PS_DEBUG', TRUE );	// DEBUG , beta only
 	defined('_DB_DEBUG') || define('_DB_DEBUG', TRUE );	// DEBUG , beta only
@@ -31,6 +32,7 @@ else
 {
 	defined('LOG_LEVEL') || define('LOG_LEVEL', 5 ); // 3=err,4=warn,5=notice,6=info,7=debug
 	define('L_DOMAIN', 'example.info' );	// 主域名
+	define('L_RES_URL', 'http://fatso.dev/');
 	define('APP_SESSION', '_sess');
 }
 
