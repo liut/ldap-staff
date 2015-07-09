@@ -29,7 +29,7 @@ function start() {
         fi
 
         if [ ! -z "$RES_URL" ]; then
-          sed -i "s/RES_URL', '.*'/RES_URL', '$RES_URL'/g" $CONFIG
+          sed -i "s|, 'http://fatso.dev/'|, '$RES_URL'|g" $CONFIG
         fi
 
         if [ ! -z "$APP_SESSION" ]; then

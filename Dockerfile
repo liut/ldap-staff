@@ -1,7 +1,17 @@
 FROM alpine:3.2
 MAINTAINER Eagle Liut <eagle@dantin.me>
 
-RUN apk add --update bash nginx php-fpm php-ldap php-mcrypt php-json php-ctype php-pdo_sqlite rsync && rm -rf /var/cache/apk/*
+RUN apk add --update \
+  bash \
+  nginx \
+  php-fpm \
+  php-ldap \
+  php-mcrypt \
+  php-json \
+  php-ctype \
+  php-pdo_sqlite \
+  rsync \
+  && rm -rf /var/cache/apk/*
 
 RUN sed -i "s|listen = .*|listen = /var/run/php5-fpm.sock|g" /etc/php/php-fpm.conf \
  && sed -i "s|;listen.owner = .*|listen.owner = nobody|g" /etc/php/php-fpm.conf \
